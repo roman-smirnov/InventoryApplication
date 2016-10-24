@@ -1,4 +1,4 @@
-package roman.com.inventoryapplication;
+package roman.com.inventoryapplication.data;
 
 
 import android.content.ContentResolver;

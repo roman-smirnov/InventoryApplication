@@ -1,4 +1,4 @@
-package roman.com.inventoryapplication;
+package roman.com.inventoryapplication.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,14 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * this class is responsible for performing CRUD operations with the sqlite database
  */
-public class DatabaseHandler extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * main constructor
      *
      * @param context
      */
-    public DatabaseHandler(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DatabaseContract.DATABASE_NAME, null, DatabaseContract.DATABASE_VERSION);
     }
 

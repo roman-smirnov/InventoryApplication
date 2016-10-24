@@ -1,4 +1,4 @@
-package roman.com.inventoryapplication;
+package roman.com.inventoryapplication.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -26,14 +26,14 @@ public class DatabaseProvider extends ContentProvider {
     }
 
     // our database helper
-    private DatabaseHandler mDatabaseHandler;
+    private DatabaseHelper mDatabaseHelper;
 
     /**
      * Initialize the provider and the database helper object.
      */
     @Override
     public boolean onCreate() {
-        mDatabaseHandler = new DatabaseHandler(getContext());
+        mDatabaseHelper = new DatabaseHelper(getContext());
         return true;
     }
 
@@ -44,7 +44,7 @@ public class DatabaseProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        SQLiteDatabase database = mDatabaseHandler.getReadableDatabase();
+        SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
 
         Cursor cursor;
         // Figure out if the URI matcher can match the URI to a specific code
@@ -167,7 +167,7 @@ public class DatabaseProvider extends ContentProvider {
         checkItemBlob(values);
 
         // Get writeable database
-        SQLiteDatabase database = mDatabaseHandler.getWritableDatabase();
+        SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
         // Insert the new pet with the given values
         long id = database.insert(DatabaseContract.TableInventory.TABLE_NAME, null, values);
@@ -221,7 +221,7 @@ public class DatabaseProvider extends ContentProvider {
         }
 
         // Otherwise, get writeable database to update the data
-        SQLiteDatabase database = mDatabaseHandler.getWritableDatabase();
+        SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
         // Perform the update on the database and get the number of rows affected
         int rowsUpdated = database.update(DatabaseContract.TableInventory.TABLE_NAME, values, selection, selectionArgs);
@@ -243,7 +243,7 @@ public class DatabaseProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // Get writeable database
-        SQLiteDatabase database = mDatabaseHandler.getWritableDatabase();
+        SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
         // Track the number of rows that were deleted
         int rowsDeleted;
