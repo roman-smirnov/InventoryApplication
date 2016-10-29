@@ -10,6 +10,7 @@ import android.support.v4.content.Loader;
 import roman.com.inventoryapplication.adapters.ItemsCursorAdapter;
 import roman.com.inventoryapplication.contracts.EditorContract;
 import roman.com.inventoryapplication.data.DatabaseContract;
+import roman.com.inventoryapplication.dataobjects.CompleteInventoryItem;
 import roman.com.inventoryapplication.fragments.EditorFragment;
 import roman.com.inventoryapplication.utils.MyApplication;
 
@@ -24,6 +25,8 @@ public class EditorPresenter implements EditorContract.Presenter, LoaderManager.
     private static final int LOADER_ID = 1207;
     private EditorContract.View mView;
     private LoaderManager mLoaderManager;
+
+    private CompleteInventoryItem mCompleteInventoryItem = null;
 
     public EditorPresenter(@NonNull EditorContract.View view, @NonNull LoaderManager loaderManager) {
         checkNotNull(view);
@@ -66,7 +69,8 @@ public class EditorPresenter implements EditorContract.Presenter, LoaderManager.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mView.showItem(ItemsCursorAdapter.getCompleteItemFromCursor(data));
+        mCompleteInventoryItem = ItemsCursorAdapter.getCompleteItemFromCursor(data);
+        mView.showItem(mCompleteInventoryItem);
     }
 
     @Override
@@ -76,21 +80,30 @@ public class EditorPresenter implements EditorContract.Presenter, LoaderManager.
 
     @Override
     public void decreaseQuantity() {
-
+        mCompleteInventoryItem.decreaseQuantity();
+        mView.showItem(mCompleteInventoryItem);
     }
 
     @Override
     public void increaseQunatity() {
-
+        mCompleteInventoryItem.increaseQuantity();
+        mView.showItem(mCompleteInventoryItem);
     }
 
     @Override
     public void decreasePrice() {
-
+        mCompleteInventoryItem.decreasePrice();
+        mView.showItem(mCompleteInventoryItem);
     }
 
     @Override
     public void increasePrice() {
+        mCompleteInventoryItem.increasePrice();
+        mView.showItem(mCompleteInventoryItem);
+    }
 
+    @Override
+    public void emailContact() {
+        //TODO do some stuff and show user the contact via email app
     }
 }

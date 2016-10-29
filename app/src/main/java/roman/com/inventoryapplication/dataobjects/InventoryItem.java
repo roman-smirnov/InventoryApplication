@@ -5,10 +5,10 @@ import android.database.Cursor;
 import roman.com.inventoryapplication.data.DatabaseContract;
 
 public class InventoryItem{
-    private String mName;
-    private int mPrice;
-    private int mQuantity;
-    private int mId;
+    protected String mName;
+    protected int mPrice;
+    protected int mQuantity;
+    protected int mId;
 
     public InventoryItem(String name, int price, int quantity, int id) {
         mName = name;

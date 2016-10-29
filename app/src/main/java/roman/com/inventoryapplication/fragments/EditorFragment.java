@@ -78,8 +78,16 @@ public class EditorFragment extends Fragment implements EditorContract.View{
         return view;
     }
 
+    /**
+     * set button click listeners
+     */
     private void setButtonListeners() {
-        mIncreasePriceButton.setOnClickListener((View view) -> mPresenter.);
+        //set listener using lambdas
+        mIncreasePriceButton.setOnClickListener((View view) -> mPresenter.increasePrice());
+        mDecreasePriceButton.setOnClickListener((View view) -> mPresenter.decreasePrice());
+        mIncreaseQuantityButton.setOnClickListener((View view) -> mPresenter.increaseQunatity());
+        mDecreaseQuantityButton.setOnClickListener((View view) -> mPresenter.decreaseQuantity());
+        mContactButton.setOnClickListener((View view) -> mPresenter.emailContact());
     }
 
 
@@ -90,6 +98,11 @@ public class EditorFragment extends Fragment implements EditorContract.View{
         mFragmentActionListener = (FragmentActionListener) getActivity();
     }
 
+
+    /**
+     * load show data loaded from the sqlite database
+     * @param item
+     */
     @Override
     public void showItem(CompleteInventoryItem item) {
         mItemPictureImageView.setImageDrawable(item.getDrawable());
@@ -98,4 +111,10 @@ public class EditorFragment extends Fragment implements EditorContract.View{
         mItemQuantityTextView.setText(String.valueOf(item.getQuantity()));
         mContactButton.setText(item.getContactEmail());
     }
+
+    @Override
+    public void showEmailContact() {
+
+    }
+
 }
