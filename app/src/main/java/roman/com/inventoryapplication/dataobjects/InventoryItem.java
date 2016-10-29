@@ -29,6 +29,10 @@ public class InventoryItem{
         return mQuantity;
     }
 
+    public int getId() {
+        return mId;
+    }
+
     public static InventoryItem fromCursor(Cursor cursor) {
 
         // Find the columns of  attributes that we're interested in
@@ -43,6 +47,8 @@ public class InventoryItem{
         int itemPrice = cursor.getInt(priceColumnIndex);
         int itemQuantity = cursor.getInt(quantityColumnIndex);
         int itemId = cursor.getInt(idColumnIndex);
+
+        System.out.println(">>> id= " + itemId+" name = "+itemName+ " price= "+ itemPrice+" quantity= " +itemQuantity);
 
         return new InventoryItem(itemName, itemPrice,itemQuantity, itemId);
     }

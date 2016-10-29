@@ -1,11 +1,8 @@
 package roman.com.inventoryapplication.fragments;
 
-import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,33 +11,41 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import roman.com.inventoryapplication.Presenters.ItemsPresenter;
 import roman.com.inventoryapplication.R;
-import roman.com.inventoryapplication.adapters.ItemsCursorRecyclerViewAdaper;
-import roman.com.inventoryapplication.data.DatabaseContract;
+import roman.com.inventoryapplication.adapters.ItemsRecyclerAdapter;
+import roman.com.inventoryapplication.contracts.ItemsContract;
+import roman.com.inventoryapplication.dataobjects.InventoryItem;
+import roman.com.inventoryapplication.listeners.FragmentActionListener;
 import roman.com.inventoryapplication.listeners.RecyclerTouchListener;
+import roman.com.inventoryapplication.utils.MyApplication;
+
+import static roman.com.inventoryapplication.utils.Preconditions.checkNotNull;
 
 
 /**
  * A fragment representing a list of inventory items
  */
-public class ItemFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor>, RecyclerTouchListener.ClickListener{
-
-    // id of the article loader
-    private static final int LOADER_ID = 2701;
+public class ItemsFragment extends Fragment implements RecyclerTouchListener.ClickListener, ItemsContract.View {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
 
+    private FragmentActionListener mFragmentActionListener;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
-    private ItemsCursorRecyclerViewAdaper mAdapter;
+    private ItemsRecyclerAdapter mAdapter;
+
+    private ItemsContract.Presenter mPresenter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ItemFragment() {
+    public ItemsFragment() {
     }
 
     @Override
@@ -50,8 +55,8 @@ public class ItemFragment extends Fragment implements
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,73 +68,65 @@ public class ItemFragment extends Fragment implements
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mAdapter = new ItemsCursorRecyclerViewAdaper(getContext(),null);
+        mAdapter = new ItemsRecyclerAdapter(new ArrayList<InventoryItem>(0));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
         //touch events will be called on 'this'
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), mRecyclerView, this));
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(MyApplication.getContext(), mRecyclerView, this));
+        mPresenter = new ItemsPresenter(this, getLoaderManager());
         return view;
     }
 
     /**
      * a list item onclick listener
+     *
      * @param view
      * @param position
      */
     @Override
     public void onClick(View view, int position) {
-        //TODO onClick open the detail activity
+        System.out.println(">>> onClick recyclerview");
+        mPresenter.editItem(mAdapter.getItem(position).getId());
     }
 
     /**
      * a list item onLongClick listener
+     *
      * @param view
      * @param position
      */
     @Override
     public void onLongClick(View view, int position) {
         // not implemented in our app
-    }
 
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Kick off the loader
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        mFragmentActionListener = (FragmentActionListener) getActivity();
         mProgressBar.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
-    }
+        mPresenter.start();
 
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        // Define a projection that specifies the columns from the table we care about.
-        String[] projection = {
-                DatabaseContract.TableInventory.COLUMN_ID,
-                DatabaseContract.TableInventory.COLUMN_NAME,
-                DatabaseContract.TableInventory.COLUMN_PRICE,
-                DatabaseContract.TableInventory.COLUMN_QUANTITY };
-
-        // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(getContext(),   // Parent activity context
-                DatabaseContract.TableInventory.CONTENT_URI,   // Provider content URI to query
-                projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
-                null,                   // No selection arguments
-                null);                  // Default sort order
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
+    public void showItems(@NonNull List<InventoryItem> itemList) {
+        System.out.println(">>> showItems");
+        checkNotNull(itemList);
+        mAdapter.replaceData(itemList);
         mProgressBar.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+    public void showNewItem() {
+
+    }
+
+    @Override
+    public void showEditItem(int itemId) {
+        mFragmentActionListener.onOpenExistingItem(itemId);
     }
 }

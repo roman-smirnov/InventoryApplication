@@ -5,10 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/single_margin"
-    android:layout_marginRight="@dimen/single_margin"
     app:layoutManager="LinearLayoutManager"
-    tools:context="roman.com.inventoryapplication.fragments.ItemFragment"
+    tools:context="roman.com.inventoryapplication.fragments.ItemsFragment"
     tools:listitem="@layout/fragment_items_list_item"
     >
 
@@ -16,7 +14,19 @@
         android:id="@+id/inventory_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/single_margin"
+        android:layout_marginRight="@dimen/single_margin"
         />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        app:backgroundTint="@color/colorPrimary"
+        android:tint="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/single_margin"
+        android:src="@android:drawable/ic_input_add"/>
 
     <ProgressBar
         android:id="@+id/circular_progress_bar"

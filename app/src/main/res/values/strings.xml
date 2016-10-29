@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Inventory Application</string>
+    <string name="item_name">"Name: "</string>
+    <string name="item_price">"Price: "</string>
+    <string name="item_quantity">"Quantity: "</string>
+    <string name="item_image">item image</string>
+    <string name="plus_button_text">+</string>
+    <string name="minus_button_text">-</string>
+    <string name="price_label">Price:</string>
+    <string name="quantity_label">Quantity:</string>
+    <string name="contact_button_text">contact item supplier</string>
 </resources>

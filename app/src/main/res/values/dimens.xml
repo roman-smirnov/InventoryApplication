@@ -1,5 +1,9 @@
 <resources>
 
+    <!--image sizes-->
+    <!-- 1 inch size on screen-->
+    <dimen name="imageview_size">160dp</dimen>
+
     <!--text sizes-->
     <dimen name="title_text">24sp</dimen>
     <dimen name="subtitle_text">20sp</dimen>

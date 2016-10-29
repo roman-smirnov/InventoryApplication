@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="roman.com.inventoryapplication.activities.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/single_margin"
+        >
+
+
+        <ImageView
+            android:id="@+id/fragment_editor_picture"
+            android:layout_width="@dimen/imageview_size"
+            android:layout_height="@dimen/imageview_size"
+            android:layout_gravity="center"
+            android:contentDescription="@string/item_image"
+            />
+
+        <TextView
+            android:id="@+id/fragment_editor_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/half_margin"
+            android:focusable="false"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/price_label"
+                />
+
+            <TextView
+                android:id="@+id/fragment_editor_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/subtitle_text"/>
+
+            <Button
+                android:id="@+id/fragment_editor_increase_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/plus_button_text"/>
+
+            <Button
+                android:id="@+id/fragment_editor_decrease_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/minus_button_text"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/quantity_label"
+                />
+
+            <TextView
+                android:id="@+id/fragment_editor_quantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/subtitle_text"/>
+
+            <Button
+                android:id="@+id/fragment_editor_increase_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plus_button_text"/>
+
+            <Button
+                android:id="@+id/fragment_editor_decrease_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/minus_button_text"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/fragment_editor_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/half_margin"
+            android:text="@string/contact_button_text"
+            />
+
+    </LinearLayout>
+
+</ScrollView>
