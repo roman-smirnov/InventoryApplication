@@ -1,16 +1,23 @@
 package roman.com.inventoryapplication.dataobjects;
 
+import android.content.ContentValues;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+
+import roman.com.inventoryapplication.data.DatabaseContract;
+import roman.com.inventoryapplication.utils.MyApplication;
+
+import static roman.com.inventoryapplication.utils.Preconditions.checkNotNull;
 
 /**
  *
  */
-public class CompleteInventoryItem extends InventoryItem{
+public class CompleteInventoryItem extends InventoryItem {
     private Drawable mDrawable;
     private String mContact;
 
-    public CompleteInventoryItem(InventoryItem inventoryItem,String contactEmail, Drawable drawable) {
-        super(inventoryItem.getName(),inventoryItem.getPrice(),inventoryItem.getQuantity(),inventoryItem.getId());
+    public CompleteInventoryItem(InventoryItem inventoryItem, String contactEmail, Drawable drawable) {
+        super(inventoryItem.getName(), inventoryItem.getPrice(), inventoryItem.getQuantity(), inventoryItem.getId());
         mDrawable = drawable;
         mContact = contactEmail;
     }
@@ -25,62 +32,46 @@ public class CompleteInventoryItem extends InventoryItem{
 
     public void increasePrice() {
         mPrice++;
-        new PriceIncreaser().start();
+        new DatabaseUpdateThread(mId, getContentValues()).start();
     }
 
-    public void decreasePrice(){
+    public void decreasePrice() {
         mPrice--;
-        new PriceDecreaser().start();
+        new DatabaseUpdateThread(mId, getContentValues()).start();
     }
 
-    public void increaseQuantity(){
+    public void increaseQuantity() {
         mQuantity++;
-        new QuantityIncreaser().start();
+        new DatabaseUpdateThread(mId, getContentValues()).start();
     }
-    public void decreaseQuantity(){
+
+    public void decreaseQuantity() {
         mQuantity--;
-        new QuantityDecreaser().start();
+        new DatabaseUpdateThread(mId, getContentValues()).start();
     }
 
+    private ContentValues getContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.TableInventory.COLUMN_PRICE, mPrice);
+        values.put(DatabaseContract.TableInventory.COLUMN_QUANTITY, mQuantity);
+        return values;
+    }
 
-    /**
-     * this thread is used to update the price increase at the sqlite database
-     */
-    private static class PriceIncreaser extends Thread{
-        @Override
-        public void run() {
-            //TODO implement price increase query
+    private static class DatabaseUpdateThread extends Thread {
+        private ContentValues mContentValues;
+        private int mId;
+
+        public DatabaseUpdateThread(int id, @NonNull ContentValues contentValues) {
+            mId = id;
+            mContentValues = checkNotNull(contentValues);
         }
-    }
 
-
-    /**
-     * this thread is used to update the price increase at the sqlite database
-     */
-    private static class PriceDecreaser extends Thread{
         @Override
         public void run() {
-        }
-    }
-
-
-    /**
-     * this thread is used to update the quantity up  at the sqlite database
-     */
-    private static class QuantityIncreaser extends Thread{
-        @Override
-        public void run() {
-            //TODO implement db quantity increase
-        }
-    }
-
-    /**
-     * this thread is used to update the quantity down at the sqlite database
-     */
-    private static class QuantityDecreaser extends Thread{
-        @Override
-        public void run() {
-            //TODO implement price increase query
+            String selection = "_id=?";
+            String[] selectionArgs = {String.valueOf(mId)};
+            // update a row in the database
+            MyApplication.getContext().getContentResolver().update(DatabaseContract.TableInventory.CONTENT_URI, mContentValues, selection, selectionArgs);
         }
     }
 

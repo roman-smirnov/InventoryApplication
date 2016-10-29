@@ -83,11 +83,11 @@ public class EditorFragment extends Fragment implements EditorContract.View{
      */
     private void setButtonListeners() {
         //set listener using lambdas
-        mIncreasePriceButton.setOnClickListener((View view) -> mPresenter.increasePrice());
-        mDecreasePriceButton.setOnClickListener((View view) -> mPresenter.decreasePrice());
-        mIncreaseQuantityButton.setOnClickListener((View view) -> mPresenter.increaseQunatity());
-        mDecreaseQuantityButton.setOnClickListener((View view) -> mPresenter.decreaseQuantity());
-        mContactButton.setOnClickListener((View view) -> mPresenter.emailContact());
+        mIncreasePriceButton.setOnClickListener(view -> mPresenter.increasePrice());
+        mDecreasePriceButton.setOnClickListener(view -> mPresenter.decreasePrice());
+        mIncreaseQuantityButton.setOnClickListener(view -> mPresenter.increaseQunatity());
+        mDecreaseQuantityButton.setOnClickListener(view -> mPresenter.decreaseQuantity());
+        mContactButton.setOnClickListener(view -> mPresenter.emailContact());
     }
 
 
