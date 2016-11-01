@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println(">>> MainActivity oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void checkIfFirstRun() {
         int runNumber = MyApplication.getSharePreferences().getInt(KEY_RUN_COUNTER, DEFAULT_PREF_VALUE);
-        System.out.println(">>> runnumber" + runNumber);
         if (runNumber == DEFAULT_PREF_VALUE) {
             //notify the presenter
             mPresenter.isFirstRun();
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         hideBackButtonOnFragment();
         getSupportFragmentManager().popBackStack();
         System.out.println(">>> removeForegroundFragment");
-//        FIND out if you need to reload laso TODO
+//        todo FIND out if you need to reload fragment or keep the old one
 //        mForegroundFragment = new ItemsFragment();
 //        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //        fragmentTransaction.replace(R.id.fragment_container, mForegroundFragment);

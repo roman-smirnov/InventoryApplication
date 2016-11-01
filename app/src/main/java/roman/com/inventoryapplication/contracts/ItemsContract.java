@@ -17,6 +17,8 @@ public interface ItemsContract {
 
         void showEditItem(int itemId);
 
+        void showEmpty();
+
     }
 
     interface Presenter extends BasePresenter {

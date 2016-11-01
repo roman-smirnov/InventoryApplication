@@ -6,9 +6,13 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import roman.com.inventoryapplication.adapters.ItemsCursorAdapter;
 import roman.com.inventoryapplication.contracts.ItemsContract;
 import roman.com.inventoryapplication.data.DatabaseContract;
+import roman.com.inventoryapplication.dataobjects.InventoryItem;
 import roman.com.inventoryapplication.utils.MyApplication;
 
 /**
@@ -63,7 +67,14 @@ public class ItemsPresenter implements ItemsContract.Presenter, LoaderManager.Lo
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mView.showItems(ItemsCursorAdapter.getItemListFromCursor(cursor));
+        List<InventoryItem> inventoryItemList = ItemsCursorAdapter.getItemListFromCursor(cursor);
+        if (inventoryItemList.isEmpty()) {
+            //show empty list
+            mView.showItems(new ArrayList<InventoryItem>(0));
+            mView.showEmpty();
+        }else {
+            mView.showItems(inventoryItemList);
+        }
     }
 
     @Override

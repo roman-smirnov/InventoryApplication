@@ -73,6 +73,7 @@ public class EditorPresenter implements EditorContract.Presenter, LoaderManager.
 
         //if the cursor  becomes empty (e.g when deleted) check the returned value is not null
         if (mCompleteInventoryItem == null) {
+            mView.removeFromView();
             return;
         }
         mView.showItem(mCompleteInventoryItem);

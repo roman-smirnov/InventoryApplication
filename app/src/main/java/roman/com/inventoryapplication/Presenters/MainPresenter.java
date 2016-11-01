@@ -22,6 +22,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void start() {
+//        uncomment this if you don't want stuff loaded on first run
         mView.checkIfFirstRun();
     }
 
@@ -48,7 +49,7 @@ public class MainPresenter implements MainContract.Presenter {
         System.out.println(">>> insert stuff");
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             ContentValues values = new ContentValues();
             values.put(DatabaseContract.TableInventory.COLUMN_NAME, "item" + String.valueOf(i));
             values.put(DatabaseContract.TableInventory.COLUMN_PRICE, i);

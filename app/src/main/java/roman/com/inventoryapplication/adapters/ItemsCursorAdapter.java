@@ -24,40 +24,49 @@ public class ItemsCursorAdapter {
 
     /**
      * returns a list of items when given a cursor
+     *
      * @param cursor
      * @return
      */
-    public static List<InventoryItem> getItemListFromCursor(@NonNull Cursor cursor){
+    public static
+    @NonNull
+    List<InventoryItem> getItemListFromCursor(@NonNull Cursor cursor) {
         checkNotNull(cursor);
         List<InventoryItem> itemList = new ArrayList<>();
-        cursor.moveToFirst();
-        do {
-            int id = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ID));
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_NAME));
-            int price = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_PRICE));
-            int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_QUANTITY));
-            itemList.add(new InventoryItem(name, price, quantity, id));
-        } while (cursor.moveToNext());
+        //if the cursor is empty - return an empty list
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ID));
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_NAME));
+                int price = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_PRICE));
+                int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_QUANTITY));
+                itemList.add(new InventoryItem(name, price, quantity, id));
+            } while (cursor.moveToNext());
+        }
         return itemList;
     }
 
     /**
      * returns a CompleteInventoryItem object given a cursor - i.e an inventory item including the contact email and a picture of the item
+     *
      * @param cursor
      * @return
      */
-    public static @Nullable CompleteInventoryItem getCompleteItemFromCursor(@NonNull Cursor cursor) {
+    public static CompleteInventoryItem getCompleteItemFromCursor(@NonNull Cursor cursor) {
         checkNotNull(cursor);
-        if(!cursor.moveToFirst()){
+        try {
+            cursor.moveToFirst();
+            String name = cursor.getString(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_NAME));
+            int price = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_PRICE));
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ID));
+            int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_QUANTITY));
+            String contactEmail = cursor.getString(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ORDER_CONTACT_EMAIL));
+            byte[] imageBlob = cursor.getBlob(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_PICTURE));
+            Drawable drawable = new BitmapDrawable(MyApplication.getContext().getResources(), BitmapFactory.decodeByteArray(imageBlob, 0, imageBlob.length));
+            return new CompleteInventoryItem(new InventoryItem(name, price, quantity, id), contactEmail, drawable);
+        } catch (Exception e) {
             return null;
         }
-        String name = cursor.getString(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_NAME));
-        int price = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_PRICE));
-        int id = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ID));
-        int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_QUANTITY));
-        String contactEmail = cursor.getString(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ORDER_CONTACT_EMAIL));
-        byte[] imageBlob = cursor.getBlob(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_PICTURE));
-        Drawable drawable =  new BitmapDrawable(MyApplication.getContext().getResources(), BitmapFactory.decodeByteArray(imageBlob, 0, imageBlob.length));
-        return new CompleteInventoryItem(new InventoryItem(name, price, quantity, id), contactEmail,drawable);
+
     }
 }

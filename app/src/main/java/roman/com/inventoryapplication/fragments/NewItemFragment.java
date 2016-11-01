@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import roman.com.inventoryapplication.dataobjects.CompleteInventoryItem;
 import roman.com.inventoryapplication.listeners.FragmentActionListener;
 
 import static android.app.Activity.RESULT_OK;
+import static roman.com.inventoryapplication.utils.Preconditions.checkNotNull;
 
 
 /**
@@ -105,6 +107,7 @@ public class NewItemFragment extends Fragment implements NewItemContract.View {
                 Drawable drawable = mItemPictureImageView.getDrawable();
 
                 CompleteInventoryItem inventoryItem = new CompleteInventoryItem(name, price, quantity, 0, drawable, contactEmail);
+                //tell presenter to save the ite,
                 mPresenter.createItem(inventoryItem);
 
                 removeFromView();
@@ -142,7 +145,8 @@ public class NewItemFragment extends Fragment implements NewItemContract.View {
 
     }
 
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+    private Bitmap getBitmapFromUri(@NonNull Uri uri) throws IOException {
+        checkNotNull(uri);
         ParcelFileDescriptor parcelFileDescriptor =
                 getActivity().getContentResolver().openFileDescriptor(uri, "r");
         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();

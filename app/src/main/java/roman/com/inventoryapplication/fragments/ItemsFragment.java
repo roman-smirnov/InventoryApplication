@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,8 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        System.out.println(">>> onCreateView");
         View view = inflater.inflate(R.layout.fragment_items_list, container, false);
 
 
@@ -112,10 +115,10 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
 
     @Override
     public void onStart() {
+        System.out.println(">>> onCreateView");
         super.onStart();
         mFragmentActionListener = (FragmentActionListener) getActivity();
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.GONE);
+        showLoading();
         mPresenter.start();
 
     }
@@ -125,17 +128,46 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
         System.out.println(">>> showItems");
         checkNotNull(itemList);
         mAdapter.replaceData(itemList);
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        hideLoading();
+        hideEmptyMessage();
     }
 
     @Override
     public void showNewItem() {
+        System.out.println(">>> showNewItem");
         mFragmentActionListener.onCreateNewItem();
     }
 
     @Override
     public void showEditItem(int itemId) {
+        System.out.println(">>> showEditItem");
         mFragmentActionListener.onOpenExistingItem(itemId);
+    }
+
+    @Override
+    public void showEmpty() {
+        System.out.println(">>> showEmpty");
+        showEmptyMessage();
+        hideLoading();
+    }
+
+    private void showLoading() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+    }
+
+    private void hideLoading() {
+        mProgressBar.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showEmptyMessage(){
+        TextView noItemsTextView = (TextView) getActivity().findViewById(R.id.fragment_items_no_items_message);
+        noItemsTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideEmptyMessage(){
+        TextView noItemsTextView = (TextView) getActivity().findViewById(R.id.fragment_items_no_items_message);
+        noItemsTextView.setVisibility(View.GONE);
     }
 }

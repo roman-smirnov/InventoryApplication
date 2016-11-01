@@ -14,4 +14,5 @@
     <string name="email_text_suject">order some more stuff</string>
     <string name="email_choose_text">Send mail...</string>
     <string name="item_contact">contact email</string>
+    <string name="no_items_message">NO ITEMS TO DISPLAY - ADD NEW ITEMS TO SHOW</string>
 </resources>
