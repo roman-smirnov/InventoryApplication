@@ -75,6 +75,8 @@ public class ItemsPresenter implements ItemsContract.Presenter, LoaderManager.Lo
         }else {
             mView.showItems(inventoryItemList);
         }
+
+
     }
 
     @Override
