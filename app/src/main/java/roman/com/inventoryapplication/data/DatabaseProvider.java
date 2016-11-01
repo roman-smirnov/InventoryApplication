@@ -195,7 +195,7 @@ public class DatabaseProvider extends ContentProvider {
             case ITEMS:
                 return updateItem(uri, contentValues, selection, selectionArgs);
             case ITEM_ID:
-                // For the PET_ID code, extract out the ID from the URI,
+                // For the ITEM_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = DatabaseContract.TableInventory.COLUMN_ID + "=?";
@@ -209,11 +209,12 @@ public class DatabaseProvider extends ContentProvider {
     private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         //if one of these is not invalid - an illegalArgumentException will be called at runtime
-        checkItemName(values);
         checkItemPrice(values);
-        checkItemQuantity(values);
-        checkItemContact(values);
-        checkItemBlob(values);
+
+//        we don't update these - so no need to check
+//        checkItemName(values);
+//        checkItemQuantity(values);
+//        checkItemContact(values);
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {

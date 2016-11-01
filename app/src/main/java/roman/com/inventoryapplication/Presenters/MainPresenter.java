@@ -11,9 +11,6 @@ import roman.com.inventoryapplication.contracts.MainContract;
 import roman.com.inventoryapplication.data.DatabaseContract;
 import roman.com.inventoryapplication.utils.MyApplication;
 
-/**
- * Created by roman on 10/27/16.
- */
 
 public class MainPresenter implements MainContract.Presenter {
 

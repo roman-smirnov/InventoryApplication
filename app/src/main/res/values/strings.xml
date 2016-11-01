@@ -9,4 +9,9 @@
     <string name="price_label">Price:</string>
     <string name="quantity_label">Quantity:</string>
     <string name="contact_button_text">contact item supplier</string>
+    <string name="action_settings">Settings</string>
+    <string name="email_text_body">Hello, we would like to order some stuff</string>
+    <string name="email_text_suject">order some more stuff</string>
+    <string name="email_choose_text">Send mail...</string>
+    <string name="item_contact">contact email</string>
 </resources>

@@ -2,6 +2,7 @@ package roman.com.inventoryapplication.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +40,8 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
     private ProgressBar mProgressBar;
     private ItemsRecyclerAdapter mAdapter;
 
+    private FloatingActionButton mFloatingActionButton;
+
     private ItemsContract.Presenter mPresenter;
 
     /**
@@ -55,6 +58,7 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
     }
 
 
@@ -62,6 +66,11 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items_list, container, false);
+
+
+        mFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fragment_items_fab);
+
+        mFloatingActionButton.setOnClickListener(v -> mPresenter.newItem());
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.inventory_list);
         mProgressBar = (ProgressBar) view.findViewById(R.id.circular_progress_bar);
@@ -122,7 +131,7 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
 
     @Override
     public void showNewItem() {
-
+        mFragmentActionListener.onCreateNewItem();
     }
 
     @Override

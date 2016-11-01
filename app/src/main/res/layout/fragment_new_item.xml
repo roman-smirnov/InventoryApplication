@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="roman.com.inventoryapplication.activities.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/single_margin"
+        >
+
+        <ImageView
+            android:id="@+id/fragment_new_item_picture"
+            android:layout_width="@dimen/imageview_size"
+            android:layout_height="@dimen/imageview_size"
+            android:layout_gravity="center"
+            android:contentDescription="@string/item_image"
+            android:src="@mipmap/ic_launcher"
+            />
+
+        <!--name -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/half_margin"
+            android:focusable="false"
+            android:text="@string/item_name"
+            />
+
+        <EditText
+            android:id="@+id/fragment_new_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/subtitle_text"
+            android:inputType="text"/>
+
+        <!--price-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/half_margin"
+            android:focusable="false"
+            android:text="@string/item_price"
+            />
+
+
+        <EditText
+            android:id="@+id/fragment_new_item_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/subtitle_text"
+            android:inputType="number"/>
+
+        <!--quantity-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/half_margin"
+            android:focusable="false"
+            android:text="@string/item_quantity"
+            />
+
+
+        <EditText
+            android:id="@+id/fragment_new_item_quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/subtitle_text"
+            android:inputType="number"/>
+
+        <!--contact email-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/half_margin"
+            android:focusable="false"
+            android:text="@string/item_contact"
+            />
+
+
+        <EditText
+            android:id="@+id/fragment_new_item_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/subtitle_text"
+            android:inputType="textEmailAddress"/>
+    </LinearLayout>
+
+</ScrollView>

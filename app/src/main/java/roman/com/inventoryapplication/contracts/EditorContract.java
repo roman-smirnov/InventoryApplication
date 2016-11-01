@@ -9,8 +9,8 @@ import roman.com.inventoryapplication.dataobjects.CompleteInventoryItem;
 public interface EditorContract {
     interface View {
         void showItem(CompleteInventoryItem item);
-
-        void showEmailContact();
+        void showEmailContact(String address);
+        void removeFromView();
     }
 
     interface Presenter {
@@ -25,5 +25,7 @@ public interface EditorContract {
         void increasePrice();
 
         void emailContact();
+
+        void deleteItem();
     }
 }

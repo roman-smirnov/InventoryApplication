@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +46,14 @@ public class ItemsCursorAdapter {
      * @param cursor
      * @return
      */
-    public static CompleteInventoryItem getCompleteItemFromCursor(@NonNull Cursor cursor) {
+    public static @Nullable CompleteInventoryItem getCompleteItemFromCursor(@NonNull Cursor cursor) {
         checkNotNull(cursor);
-        cursor.moveToFirst();
-        int id = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ID));
+        if(!cursor.moveToFirst()){
+            return null;
+        }
         String name = cursor.getString(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_NAME));
         int price = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_PRICE));
+        int id = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ID));
         int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_QUANTITY));
         String contactEmail = cursor.getString(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_ORDER_CONTACT_EMAIL));
         byte[] imageBlob = cursor.getBlob(cursor.getColumnIndex(DatabaseContract.TableInventory.COLUMN_PICTURE));

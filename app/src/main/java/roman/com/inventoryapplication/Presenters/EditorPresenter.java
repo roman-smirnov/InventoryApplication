@@ -70,12 +70,16 @@ public class EditorPresenter implements EditorContract.Presenter, LoaderManager.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCompleteInventoryItem = ItemsCursorAdapter.getCompleteItemFromCursor(data);
+
+        //if the cursor  becomes empty (e.g when deleted) check the returned value is not null
+        if (mCompleteInventoryItem == null) {
+            return;
+        }
         mView.showItem(mCompleteInventoryItem);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     @Override
@@ -104,6 +108,12 @@ public class EditorPresenter implements EditorContract.Presenter, LoaderManager.
 
     @Override
     public void emailContact() {
-        //TODO do some stuff and show user the contact via email app
+        mView.showEmailContact(mCompleteInventoryItem.getContactEmail());
+    }
+
+    @Override
+    public void deleteItem() {
+        mCompleteInventoryItem.deleteInventoryItem();
+        mView.removeFromView();
     }
 }

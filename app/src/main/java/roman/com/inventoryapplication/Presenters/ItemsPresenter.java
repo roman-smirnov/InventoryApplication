@@ -39,7 +39,7 @@ public class ItemsPresenter implements ItemsContract.Presenter, LoaderManager.Lo
 
     @Override
     public void newItem() {
-
+        mView.showNewItem();
     }
 
     @Override

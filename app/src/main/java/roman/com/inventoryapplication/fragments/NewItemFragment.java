@@ -1,45 +1,49 @@
 package roman.com.inventoryapplication.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
+
+import roman.com.inventoryapplication.Presenters.NewItemPresenter;
 import roman.com.inventoryapplication.R;
-import roman.com.inventoryapplication.contracts.EditorContract;
-import roman.com.inventoryapplication.data.DatabaseContract;
+import roman.com.inventoryapplication.contracts.NewItemContract;
+import roman.com.inventoryapplication.dataobjects.CompleteInventoryItem;
 import roman.com.inventoryapplication.listeners.FragmentActionListener;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
  * A fragment representing an item editor view
  */
-public class NewItemFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class NewItemFragment extends Fragment implements NewItemContract.View {
 
 
-    // id of the article loader
-    private static final int LOADER_ID = 403;
-    private EditorContract.Presenter mPresenter;
+    private static final int RESULT_LOAD_IMAGE = 403;
+
+    private NewItemContract.Presenter mPresenter;
     private FragmentActionListener mFragmentActionListener;
-
     private ImageView mItemPictureImageView;
-    private TextView mItemNameTextView;
-    private TextView mItemPriceTextView;
-    private TextView mItemQuantityTextView;
-    private Button mIncreasePriceButton;
-    private Button mDecreasePriceButton;
-    private Button mIncreaseQuantityButton;
-    private Button mDecreaseQuantityButton;
-    private Button mContactButton;
+    private EditText mItemNameEditText;
+    private EditText mItemPriceEditText;
+    private EditText mItemQuantityEditText;
+    private EditText mItemContactEditTExt;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,56 +55,105 @@ public class NewItemFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter = new NewItemPresenter(this);
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_editor, container, false);
-        mItemPictureImageView = (ImageView) view.findViewById(R.id.fragment_editor_picture);
-        mItemNameTextView = (TextView) view.findViewById(R.id.fragment_editor_name);
-        mItemPriceTextView = (TextView) view.findViewById(R.id.fragment_editor_price);
-        mItemQuantityTextView = (TextView) view.findViewById(R.id.fragment_editor_quantity);
-        mContactButton = (Button) view.findViewById(R.id.fragment_editor_contact);
+        View view = inflater.inflate(R.layout.fragment_new_item, container, false);
+
+        //set the toolbar
+        setHasOptionsMenu(true);
+
+        mItemPictureImageView = (ImageView) view.findViewById(R.id.fragment_new_item_picture);
+
+        //set the click listener to get the image url
+        mItemPictureImageView.setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        );
+
+        mItemNameEditText = (EditText) view.findViewById(R.id.fragment_new_item_name);
+        mItemPriceEditText = (EditText) view.findViewById(R.id.fragment_new_item_price);
+        mItemQuantityEditText = (EditText) view.findViewById(R.id.fragment_new_item_quantity);
+        mItemContactEditTExt = (EditText) view.findViewById(R.id.fragment_new_item_contact);
+
         return view;
     }
-
 
     @Override
     public void onStart() {
         super.onStart();
         mFragmentActionListener = (FragmentActionListener) getActivity();
-        // Kick off the loader
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        // Define a projection that specifies the columns from the table we care about.
-        String[] projection = {
-                DatabaseContract.TableInventory.COLUMN_ID,
-                DatabaseContract.TableInventory.COLUMN_NAME,
-                DatabaseContract.TableInventory.COLUMN_PRICE,
-                DatabaseContract.TableInventory.COLUMN_QUANTITY};
-
-        // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(getContext(),   // Parent activity context
-                DatabaseContract.TableInventory.CONTENT_URI,   // Provider content URI to query
-                projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
-                null,                   // No selection arguments
-                null);                  // Default sort order
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //back arrow cliked on actionbar
+            case android.R.id.home:
+                System.out.println(">>> case android.R.id.home ");
+
+                //save whatever the user did here
+                String name = mItemNameEditText.getText().toString();
+                int price = Integer.valueOf(mItemPriceEditText.getText().toString());
+                int quantity = Integer.valueOf(mItemQuantityEditText.getText().toString());
+                String contactEmail = mItemContactEditTExt.getText().toString();
+                Drawable drawable = mItemPictureImageView.getDrawable();
+
+                CompleteInventoryItem inventoryItem = new CompleteInventoryItem(name, price, quantity, 0, drawable, contactEmail);
+                mPresenter.createItem(inventoryItem);
+
+                removeFromView();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getActivity().getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            Bitmap bmp = null;
+            try {
+                bmp = getBitmapFromUri(selectedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mItemPictureImageView.setImageBitmap(bmp);
+
+        }
+
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getActivity().getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
+    }
+
+    @Override
+    public void removeFromView() {
+        System.out.println(">>> removeFromView ");
+        mFragmentActionListener.removeForegroundFragment();
     }
 }

@@ -9,4 +9,6 @@ public interface FragmentActionListener {
     void onCreateNewItem();
 
     void onOpenExistingItem(int id);
+
+    void removeForegroundFragment();
 }
