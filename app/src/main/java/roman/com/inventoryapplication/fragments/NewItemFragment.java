@@ -66,6 +66,9 @@ public class NewItemFragment extends Fragment implements NewItemContract.View {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_item, container, false);
 
+        System.out.println(">>> NewItemFragment oncreateview");
+
+
         //set the toolbar
         setHasOptionsMenu(true);
 
@@ -73,9 +76,9 @@ public class NewItemFragment extends Fragment implements NewItemContract.View {
 
         //set the click listener to get the image url
         mItemPictureImageView.setOnClickListener(v -> {
-            Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i, RESULT_LOAD_IMAGE);
-            }
+                }
         );
 
         mItemNameEditText = (EditText) view.findViewById(R.id.fragment_new_item_name);
@@ -92,6 +95,11 @@ public class NewItemFragment extends Fragment implements NewItemContract.View {
         mFragmentActionListener = (FragmentActionListener) getActivity();
     }
 
+    /**
+     * what
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -99,18 +107,27 @@ public class NewItemFragment extends Fragment implements NewItemContract.View {
             case android.R.id.home:
                 System.out.println(">>> case android.R.id.home ");
 
+                //check fields are in the right range
+                if (mItemNameEditText.getText().toString().isEmpty()
+                        || mItemPriceEditText.getText().toString().isEmpty()
+                        || mItemQuantityEditText.getText().toString().isEmpty()
+                        || mItemContactEditTExt.getText().toString().isEmpty()) {
+
+                    removeFromView();
+                    return true;
+                }
+
                 //save whatever the user did here
                 String name = mItemNameEditText.getText().toString();
                 int price = Integer.valueOf(mItemPriceEditText.getText().toString());
-                int quantity = Integer.valueOf(mItemQuantityEditText.getText().toString());
+                int quantity = Integer.valueOf(mItemPriceEditText.getText().toString());
                 String contactEmail = mItemContactEditTExt.getText().toString();
                 Drawable drawable = mItemPictureImageView.getDrawable();
-
                 CompleteInventoryItem inventoryItem = new CompleteInventoryItem(name, price, quantity, 0, drawable, contactEmail);
-                //tell presenter to save the ite,
+                //tell presenter to save the item
                 mPresenter.createItem(inventoryItem);
-
                 removeFromView();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -123,7 +140,7 @@ public class NewItemFragment extends Fragment implements NewItemContract.View {
 
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getActivity().getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
@@ -160,4 +177,5 @@ public class NewItemFragment extends Fragment implements NewItemContract.View {
         System.out.println(">>> removeFromView ");
         mFragmentActionListener.removeForegroundFragment();
     }
+
 }

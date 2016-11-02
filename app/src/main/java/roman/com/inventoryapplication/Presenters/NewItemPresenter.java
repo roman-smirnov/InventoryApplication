@@ -3,6 +3,7 @@ package roman.com.inventoryapplication.Presenters;
 import android.support.annotation.NonNull;
 
 import roman.com.inventoryapplication.contracts.NewItemContract;
+import roman.com.inventoryapplication.data.DatabaseTaskHandler;
 import roman.com.inventoryapplication.dataobjects.CompleteInventoryItem;
 
 import static roman.com.inventoryapplication.utils.Preconditions.checkNotNull;
@@ -21,7 +22,13 @@ public class NewItemPresenter implements NewItemContract.Presenter{
     @Override
     public void createItem(@NonNull CompleteInventoryItem item) {
         checkNotNull(item);
-        item.createInventoryItem();
+        validateItemFields(item);
+        DatabaseTaskHandler.createInventoryItem(item);
         mView.removeFromView();
+    }
+
+    private boolean validateItemFields(@NonNull CompleteInventoryItem item) {
+        checkNotNull(item);
+       return true;
     }
 }

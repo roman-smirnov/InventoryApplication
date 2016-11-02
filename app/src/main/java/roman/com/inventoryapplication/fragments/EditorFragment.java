@@ -1,8 +1,10 @@
 package roman.com.inventoryapplication.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,11 +63,10 @@ public class EditorFragment extends Fragment implements EditorContract.View {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_editor, container, false);
+        System.out.println(">>> editorFragment oncreateview");
 
         //set the toolbar
         setHasOptionsMenu(true);
-
-//        getActivity().getActionBar().setHomeButtonEnabled(true);
 
         mItemPictureImageView = (ImageView) view.findViewById(R.id.fragment_editor_picture);
         mItemNameTextView = (TextView) view.findViewById(R.id.fragment_editor_name);
@@ -130,7 +131,7 @@ public class EditorFragment extends Fragment implements EditorContract.View {
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL  , new String[]{address});
         i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_text_suject));
-        i.putExtra(Intent.EXTRA_TEXT   , getString(R.string.email_text_body));
+        i.putExtra(Intent.EXTRA_TEXT   , getString(R.string.email_text_body) + " "+ mItemNameTextView.getText().toString());
         try {
             startActivity(Intent.createChooser(i, getString(R.string.email_choose_text)));
         } catch (android.content.ActivityNotFoundException ex) {
@@ -138,6 +139,11 @@ public class EditorFragment extends Fragment implements EditorContract.View {
         }
     }
 
+    /**
+     * add the trashcan icon to the appbar
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -145,6 +151,11 @@ public class EditorFragment extends Fragment implements EditorContract.View {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * handle clicks on trashcan icon or back arrow
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -156,17 +167,37 @@ public class EditorFragment extends Fragment implements EditorContract.View {
             case R.id.fragment_editor_edit_icon:
                 //delete icon clicked on actionbar
                 System.out.println(">>> case R.id.fragment_editor_edit_icon ");
-                mPresenter.deleteItem();
+                showConfirmDeleteDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    /**
+     * show a delete confirmation dialog
+     */
+    private void showConfirmDeleteDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.delete_confirm_title)
+                .setMessage(R.string.delete_cofirm_message)
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    //tell presenter to delete the item
+                    mPresenter.deleteItem();
+                })
+                .setNegativeButton(android.R.string.no, (dialog, which) -> {
+                    // do nothing
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    /**
+     * tell the activity to remove the fragment from foreground
+     */
     @Override
     public void removeFromView() {
         System.out.println(">>> removeFromView ");
         mFragmentActionListener.removeForegroundFragment();
-        // TODO tell activity to remove fragment from view
     }
 }

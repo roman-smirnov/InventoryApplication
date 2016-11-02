@@ -1,9 +1,9 @@
 package roman.com.inventoryapplication.listeners;
 
-/**
- * Created by roman on 10/25/16.
- */
 
+/**
+ * callback listener from fragment to activty
+ */
 public interface FragmentActionListener {
 
     void onCreateNewItem();

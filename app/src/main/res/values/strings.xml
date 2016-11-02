@@ -10,9 +10,13 @@
     <string name="quantity_label">Quantity:</string>
     <string name="contact_button_text">contact item supplier</string>
     <string name="action_settings">Settings</string>
-    <string name="email_text_body">Hello, we would like to order some stuff</string>
+    <string name="email_text_body">Hello, we would like to order some stuff of item</string>
     <string name="email_text_suject">order some more stuff</string>
     <string name="email_choose_text">Send mail...</string>
     <string name="item_contact">contact email</string>
     <string name="no_items_message">NO ITEMS TO DISPLAY - ADD NEW ITEMS TO SHOW</string>
+    <string name="button_sold_text">SOLD</string>
+    <string name="delete_cofirm_message">Are you sure you want to delete this item?</string>
+    <string name="delete_confirm_title">Delete item</string>
+    <string name="fragment_new_item_image_hint">click to choose picture</string>
 </resources>

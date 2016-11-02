@@ -10,6 +10,7 @@ import android.support.v4.content.Loader;
 import roman.com.inventoryapplication.adapters.ItemsCursorAdapter;
 import roman.com.inventoryapplication.contracts.EditorContract;
 import roman.com.inventoryapplication.data.DatabaseContract;
+import roman.com.inventoryapplication.data.DatabaseTaskHandler;
 import roman.com.inventoryapplication.dataobjects.CompleteInventoryItem;
 import roman.com.inventoryapplication.fragments.EditorFragment;
 import roman.com.inventoryapplication.utils.MyApplication;
@@ -85,25 +86,25 @@ public class EditorPresenter implements EditorContract.Presenter, LoaderManager.
 
     @Override
     public void decreaseQuantity() {
-        mCompleteInventoryItem.decreaseQuantity();
+        DatabaseTaskHandler.decreaseQuantity(mCompleteInventoryItem);
         mView.showItem(mCompleteInventoryItem);
     }
 
     @Override
     public void increaseQunatity() {
-        mCompleteInventoryItem.increaseQuantity();
+        DatabaseTaskHandler.increaseQuantity(mCompleteInventoryItem);
         mView.showItem(mCompleteInventoryItem);
     }
 
     @Override
     public void decreasePrice() {
-        mCompleteInventoryItem.decreasePrice();
+        DatabaseTaskHandler.decreasePrice(mCompleteInventoryItem);
         mView.showItem(mCompleteInventoryItem);
     }
 
     @Override
     public void increasePrice() {
-        mCompleteInventoryItem.increasePrice();
+        DatabaseTaskHandler.increasePrice(mCompleteInventoryItem);
         mView.showItem(mCompleteInventoryItem);
     }
 
@@ -114,7 +115,7 @@ public class EditorPresenter implements EditorContract.Presenter, LoaderManager.
 
     @Override
     public void deleteItem() {
-        mCompleteInventoryItem.deleteInventoryItem();
+        DatabaseTaskHandler.deleteInventoryItem(mCompleteInventoryItem);
         mView.removeFromView();
     }
 }

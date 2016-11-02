@@ -20,10 +20,10 @@ import roman.com.inventoryapplication.Presenters.ItemsPresenter;
 import roman.com.inventoryapplication.R;
 import roman.com.inventoryapplication.adapters.ItemsRecyclerAdapter;
 import roman.com.inventoryapplication.contracts.ItemsContract;
+import roman.com.inventoryapplication.data.DatabaseTaskHandler;
 import roman.com.inventoryapplication.dataobjects.InventoryItem;
 import roman.com.inventoryapplication.listeners.FragmentActionListener;
-import roman.com.inventoryapplication.listeners.RecyclerTouchListener;
-import roman.com.inventoryapplication.utils.MyApplication;
+import roman.com.inventoryapplication.listeners.RecyclerClickListener;
 
 import static roman.com.inventoryapplication.utils.Preconditions.checkNotNull;
 
@@ -31,7 +31,7 @@ import static roman.com.inventoryapplication.utils.Preconditions.checkNotNull;
 /**
  * A fragment representing a list of inventory items
  */
-public class ItemsFragment extends Fragment implements RecyclerTouchListener.ClickListener, ItemsContract.View {
+public class ItemsFragment extends Fragment implements ItemsContract.View, RecyclerClickListener{
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -55,7 +55,6 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -80,37 +79,35 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mAdapter = new ItemsRecyclerAdapter(new ArrayList<InventoryItem>(0));
+        mAdapter = new ItemsRecyclerAdapter(new ArrayList<InventoryItem>(0), this);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
         //touch events will be called on 'this'
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(MyApplication.getContext(), mRecyclerView, this));
         mPresenter = new ItemsPresenter(this, getLoaderManager());
         return view;
     }
 
+
     /**
-     * a list item onclick listener
-     *
+     * the whole row was clicked
      * @param view
      * @param position
      */
     @Override
-    public void onClick(View view, int position) {
-        System.out.println(">>> onClick recyclerview");
+    public void onClickRow(View view, int position) {
+        System.out.println(">>> whoel row was clicked");
         mPresenter.editItem(mAdapter.getItem(position).getId());
     }
 
     /**
-     * a list item onLongClick listener
-     *
+     * just the buttom inside the row was clicked
      * @param view
      * @param position
      */
     @Override
-    public void onLongClick(View view, int position) {
-        // not implemented in our app
-
+    public void onClickRowItem(View view, int position) {
+        System.out.println(">>> just the button in the row was clicked");
+        DatabaseTaskHandler.decreaseQuantity(mAdapter.getItem(position));
     }
 
     @Override
@@ -161,12 +158,12 @@ public class ItemsFragment extends Fragment implements RecyclerTouchListener.Cli
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void showEmptyMessage(){
+    private void showEmptyMessage() {
         TextView noItemsTextView = (TextView) getActivity().findViewById(R.id.fragment_items_no_items_message);
         noItemsTextView.setVisibility(View.VISIBLE);
     }
 
-    private void hideEmptyMessage(){
+    private void hideEmptyMessage() {
         TextView noItemsTextView = (TextView) getActivity().findViewById(R.id.fragment_items_no_items_message);
         noItemsTextView.setVisibility(View.GONE);
     }

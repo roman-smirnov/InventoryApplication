@@ -15,6 +15,15 @@
         android:padding="@dimen/single_margin"
         >
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/half_margin"
+            android:gravity="center"
+            android:text="@string/fragment_new_item_image_hint"
+            />
+
         <ImageView
             android:id="@+id/fragment_new_item_picture"
             android:layout_width="@dimen/imageview_size"
@@ -41,8 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="@dimen/subtitle_text"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:textSize="@dimen/subtitle_text"/>
 
         <!--price-->
         <TextView
@@ -61,8 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="@dimen/subtitle_text"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:textSize="@dimen/subtitle_text"/>
 
         <!--quantity-->
         <TextView
@@ -81,8 +90,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="@dimen/subtitle_text"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:textSize="@dimen/subtitle_text"/>
 
         <!--contact email-->
 
@@ -102,8 +111,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="@dimen/subtitle_text"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            android:textSize="@dimen/subtitle_text"/>
     </LinearLayout>
 
 </ScrollView>

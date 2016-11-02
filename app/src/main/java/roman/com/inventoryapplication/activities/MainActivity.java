@@ -39,12 +39,15 @@ public class MainActivity extends AppCompatActivity
 
 
         if (savedInstanceState == null) {
+            System.out.println(">>> oncreateview savedInstanceState == null");
             // if a fragment does not exist
             mForegroundFragment = new ItemsFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, mForegroundFragment);
-            fragmentTransaction.commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, mForegroundFragment, KEY_FRAGMENT)
+                    .commit();
         } else {
+            System.out.println(">>> oncreateview savedInstanceState != null");
             //get the fragment if it already exists
             mForegroundFragment = getSupportFragmentManager().findFragmentById(savedInstanceState.getInt(KEY_FRAGMENT));
         }
@@ -56,7 +59,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         //save the current fragment id - so it can be reused when activity is recreated
         outState.putInt(KEY_FRAGMENT, mForegroundFragment.getId());
     }
@@ -132,11 +134,6 @@ public class MainActivity extends AppCompatActivity
         hideBackButtonOnFragment();
         getSupportFragmentManager().popBackStack();
         System.out.println(">>> removeForegroundFragment");
-//        todo FIND out if you need to reload fragment or keep the old one
-//        mForegroundFragment = new ItemsFragment();
-//        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, mForegroundFragment);
-//        fragmentTransaction.commit();
     }
 
     private void showBackButonOnFragment() {
